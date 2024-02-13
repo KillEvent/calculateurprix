@@ -47,5 +47,19 @@
         <input type="submit" value="Calculer">
     </form>
     <p id="resultat"></p>
+
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
+    <h3>Comment le montant est calculé ?</h3>
+    <p>Le montant total est calculé en fonction du nombre de participants et de la distance kilométrique, selon les règles suivantes :</p>
+    <ul>
+        <li>Entre 10 et 20 participants : le tarif par participant est de 39,90€.</li>
+        <li>Entre 21 et 30 participants : le tarif par participant est de 29,90€.</li>
+        <li>Entre 31 et 40 participants : le tarif par participant est de 19,90€.</li>
+        <li>Entre 41 et 50 participants : le tarif par participant est de 14,90€.</li>
+    </ul>
+    <p>Ensuite, 200 km sont soustraits de la distance kilométrique totale, et le reste est multiplié par 0,5€ pour calculer le coût additionnel lié à la distance.</p>
+    <p>Le montant final est la somme du coût par participant et du coût additionnel lié à la distance.</p>
+</div>
+
 </body>
 </html>
