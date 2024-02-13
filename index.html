@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculateur de Coût</title>
+    <script>
+        function calculerCout() {
+            // Récupérer les valeurs entrées par l'utilisateur
+            var nbParticipants = document.getElementById('nbParticipants').value;
+            var distance = document.getElementById('distance').value - 200;
+            var tarif = 0;
+
+            // Convertir en nombre
+            nbParticipants = parseInt(nbParticipants, 10);
+            distance = parseFloat(distance);
+
+            // Appliquer la logique de tarification
+            if(nbParticipants >= 10 && nbParticipants <= 20) {
+                tarif = 39.90;
+            } else if(nbParticipants >= 21 && nbParticipants <= 30) {
+                tarif = 29.90;
+            } else if(nbParticipants >= 31 && nbParticipants <= 40) {
+                tarif = 19.90;
+            } else if(nbParticipants > 40 && nbParticipants <= 50) {
+                tarif = 14.90;
+            }
+
+            // Calculer le coût total
+            var coutTotal = nbParticipants * tarif;
+            if(distance > 0) {
+                coutTotal += distance * 0.5;
+            }
+
+            // Afficher le résultat
+            document.getElementById('resultat').innerText = 'Coût total: ' + coutTotal.toFixed(2) + '€';
+            return false; // Pour ne pas soumettre le formulaire
+        }
+    </script>
+</head>
+<body>
+    <h2>Calculateur de Coût</h2>
+    <form onsubmit="return calculerCout();">
+        <label for="nbParticipants">Nombre de participants:</label>
+        <input type="number" id="nbParticipants" required min="10" max="50"><br><br>
+        <label for="distance">Distance kilométrique:</label>
+        <input type="number" id="distance" required><br><br>
+        <input type="submit" value="Calculer">
+    </form>
+    <p id="resultat"></p>
+</body>
+</html>
