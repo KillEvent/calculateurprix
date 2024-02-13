@@ -42,7 +42,7 @@
     <form onsubmit="return calculerCout();">
         <label for="nbParticipants">Nombre de participants:</label>
         <input type="number" id="nbParticipants" required min="10" max="50"><br><br>
-        <label for="distance">Distance kilométrique:</label>
+        <label for="distance">Distance kilométrique:(distance entre lieu de l'évènement et la ville la plus proche, Lyon / Nice / Montpellier ou Marseille - le logiciel enlève automatiquement 200k du résultat</label>
         <input type="number" id="distance" required><br><br>
         <input type="submit" value="Calculer">
     </form>
