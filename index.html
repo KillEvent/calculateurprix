@@ -88,7 +88,7 @@
           <label for="modeTarif">Mode de tarification</label>
           <select id="modeTarif">
             <option value="perso">Par personne (barème détaillé)</option>
-            <option value="forfait">Forfait animation 3h</option>
+            <option value="forfait">Format papier - clé en main</option>
           </select>
         </div>
 
@@ -102,7 +102,7 @@
           <label for="distance">Distance (aller simple, en km)</label>
           <input type="number" id="distance" min="0" step="1" placeholder="Ex : 120" />
           <div class="help">
-            Indiquez la distance <strong>aller</strong> depuis la ville la plus proche (Lyon / Marseille / Montpellier / Nice).
+            Indiquez la distance <strong>aller</strong> depuis la ville la plus proche (Paris / Lyon / Marseille / Montpellier / Nice).
             Le calcul fait automatiquement <strong>x2</strong> (aller-retour) et déduit <strong>200 km offerts</strong> au total.
             Frais de déplacement : <strong>0,50 €/km</strong> après déduction.
           </div>
@@ -173,7 +173,7 @@
     const deplEl = document.getElementById('depl');
     const totalEl = document.getElementById('total');
 
-    // Barème "par personne" (nouveaux tarifs)
+    // Format animation "par personne" (nouveaux tarifs)
     function ratePerPerson(n){
       if(n>=10 && n<=15) return 37.90;
       if(n>=16 && n<=20) return 35.60;
@@ -186,7 +186,7 @@
       return null;
     }
 
-    // Forfait animation 3h
+    // Format papier
     function forfait(n){
       if(n>=10 && n<=20) return 349;
       if(n>=21 && n<=30) return 369;
