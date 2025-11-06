@@ -1,65 +1,252 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Calculateur de Coût</title>
-    <script>
-        function calculerCout() {
-            // Récupérer les valeurs entrées par l'utilisateur
-            var nbParticipants = document.getElementById('nbParticipants').value;
-            var distance = document.getElementById('distance').value - 200;
-            var tarif = 0;
+  <meta charset="UTF-8" />
+  <title>Calculateur de prix – Kill Event</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b0b0b;
+      --panel:#121212;
+      --text:#ffffff;
+      --muted:#bcbcbc;
+      --gold:#d4af37;
+      --red:#da4f40;
+      --border:#242424;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+      line-height:1.5;
+    }
+    .wrap{
+      max-width: 980px; margin: clamp(20px,5vw,48px) auto;
+      padding: 0 clamp(16px,3vw,24px);
+    }
+    header{ text-align:center; margin-bottom:18px; }
+    .kicker{ color:var(--gold); text-transform:uppercase; letter-spacing:.14em; font-size:.9rem; }
+    h1{ margin:.25rem 0 0; font-size: clamp(26px,4.2vw,38px); font-family:"Playfair Display", Georgia, serif; }
 
-            // Convertir en nombre
-            nbParticipants = parseInt(nbParticipants, 10);
-            distance = parseFloat(distance);
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:0 12px 36px rgba(0,0,0,.35);
+      padding: clamp(18px,3.5vw,28px);
+    }
 
-            // Appliquer la logique de tarification
-            if(nbParticipants >= 10 && nbParticipants <= 20) {
-                tarif = 39.90;
-            } else if(nbParticipants >= 21 && nbParticipants <= 30) {
-                tarif = 29.90;
-            } else if(nbParticipants >= 31 && nbParticipants <= 40) {
-                tarif = 19.90;
-            } else if(nbParticipants > 40 && nbParticipants <= 50) {
-                tarif = 14.90;
-            }
+    .grid{ display:grid; gap: clamp(16px,3vw,22px); grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px){ .grid{ grid-template-columns:1fr; } }
 
-            // Calculer le coût total
-            var coutTotal = nbParticipants * tarif;
-            if(distance > 0) {
-                coutTotal += distance * 0.5;
-            }
+    label{ font-weight:700; margin-bottom:6px; display:block; }
+    .help{ color:var(--muted); font-size:.9rem; margin-top:6px; }
 
-            // Afficher le résultat
-            document.getElementById('resultat').innerText = 'Coût total: ' + coutTotal.toFixed(2) + '€';
-            return false; // Pour ne pas soumettre le formulaire
-        }
-    </script>
+    input, select{
+      width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--border);
+      background:#0f0f0f; color:var(--text); outline:none;
+    }
+    input:focus, select:focus{ border-color:var(--red); box-shadow:0 0 0 3px rgba(218,79,64,.18); }
+
+    .actions{ display:flex; gap:12px; flex-wrap:wrap; }
+    .btn{
+      appearance:none; border:none; cursor:pointer; padding:12px 20px; border-radius:999px;
+      background:linear-gradient(180deg, var(--red), #b5382d); color:#fff; font-weight:800;
+      box-shadow:0 10px 24px rgba(218,79,64,.35);
+    }
+    .btn:hover{ transform:translateY(-1px); }
+    .btn-outline{
+      background:transparent; border:1px solid var(--gold); color:var(--gold);
+    }
+
+    .result{
+      margin-top:14px; padding:14px; border-radius:12px; background:#0f0f0f; border:1px solid var(--border);
+    }
+    .row{ display:flex; justify-content:space-between; gap:12px; padding:6px 0; }
+    .row strong{ font-weight:800; }
+
+    .tables{ margin-top:18px; display:grid; gap:16px; }
+    table{ width:100%; border-collapse:collapse; }
+    th,td{ text-align:left; padding:10px 12px; border-bottom:1px solid var(--border); }
+    th{ color:var(--gold); font-weight:800; }
+    caption{ caption-side: top; color:var(--gold); font-weight:800; text-align:left; margin-bottom:6px; }
+
+    .legal{ color:var(--muted); font-size:.9rem; margin-top:14px; }
+  </style>
 </head>
 <body>
-    <h2>Calculateur de Coût</h2>
-    <form onsubmit="return calculerCout();">
-        <label for="nbParticipants">Nombre de participants:</label>
-        <input type="number" id="nbParticipants" required min="10" max="50"><br><br>
-        <label for="distance">Distance kilométrique:(distance entre lieu de l'évènement et la ville la plus proche, Lyon / Nice / Montpellier ou Marseille - le logiciel enlève automatiquement 200k du résultat</label>
-        <input type="number" id="distance" required><br><br>
-        <input type="submit" value="Calculer">
-    </form>
-    <p id="resultat"></p>
+  <div class="wrap">
+    <header>
+      <div class="kicker">Calculateur</div>
+      <h1>Tarifs animation – Kill Event</h1>
+    </header>
 
-    <div style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9;">
-    <h3>Comment le montant est calculé ?</h3>
-    <p>Le montant total est calculé en fonction du nombre de participants et de la distance kilométrique, selon les règles suivantes :</p>
-    <ul>
-        <li>Entre 10 et 20 participants : le tarif par participant est de 39,90€.</li>
-        <li>Entre 21 et 30 participants : le tarif par participant est de 29,90€.</li>
-        <li>Entre 31 et 40 participants : le tarif par participant est de 19,90€.</li>
-        <li>Entre 41 et 50 participants : le tarif par participant est de 14,90€.</li>
-    </ul>
-    <p>Ensuite, 200 km sont soustraits de la distance kilométrique totale, et le reste est multiplié par 0,5€ pour calculer le coût additionnel lié à la distance.</p>
-    <p>Le montant final est la somme du coût par participant et du coût additionnel lié à la distance.</p>
-</div>
+    <div class="panel">
+      <div class="grid">
+        <div>
+          <label for="modeTarif">Mode de tarification</label>
+          <select id="modeTarif">
+            <option value="perso">Par personne (barème détaillé)</option>
+            <option value="forfait">Forfait animation 3h</option>
+          </select>
+        </div>
 
+        <div>
+          <label for="nbParticipants">Nombre de participants</label>
+          <input type="number" id="nbParticipants" min="10" max="50" placeholder="10 à 50" />
+          <div class="help">Choisissez un nombre entre 10 et 50 joueurs.</div>
+        </div>
+
+        <div>
+          <label for="distance">Distance (aller simple, en km)</label>
+          <input type="number" id="distance" min="0" step="1" placeholder="Ex : 120" />
+          <div class="help">
+            Indiquez la distance <strong>aller</strong> depuis la ville la plus proche (Lyon / Marseille / Montpellier / Nice).
+            Le calcul fait automatiquement <strong>x2</strong> (aller-retour) et déduit <strong>200 km offerts</strong> au total.
+            Frais de déplacement : <strong>0,50 €/km</strong> après déduction.
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="btnCalc">Calculer</button>
+          <button class="btn btn-outline" id="btnReset" type="button">Réinitialiser</button>
+        </div>
+      </div>
+
+      <div class="result" id="blocResult" style="display:none">
+        <div class="row"><span>Base animation</span><strong id="base"></strong></div>
+        <div class="row"><span>Frais déplacement</span><strong id="depl"></strong></div>
+        <div class="row" style="border-top:1px solid var(--border); margin-top:8px; padding-top:8px;">
+          <span>Total estimé</span><strong id="total"></strong>
+        </div>
+      </div>
+
+      <div class="tables">
+        <div>
+          <caption>Barème “Par personne”</caption>
+          <table>
+            <thead><tr><th>Joueurs</th><th>Tarif / personne</th></tr></thead>
+            <tbody>
+              <tr><td>10 – 15</td><td>37,90 €</td></tr>
+              <tr><td>16 – 20</td><td>35,60 €</td></tr>
+              <tr><td>21 – 25</td><td>33,90 €</td></tr>
+              <tr><td>26 – 30</td><td>32,60 €</td></tr>
+              <tr><td>31 – 35</td><td>31,60 €</td></tr>
+              <tr><td>36 – 40</td><td>30,80 €</td></tr>
+              <tr><td>41 – 45</td><td>30,10 €</td></tr>
+              <tr><td>46 – 50</td><td>29,50 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <caption>Forfait animation 3 heures</caption>
+          <table>
+            <thead><tr><th>Joueurs</th><th>Forfait</th></tr></thead>
+            <tbody>
+              <tr><td>10 – 20</td><td>349 €</td></tr>
+              <tr><td>21 – 30</td><td>369 €</td></tr>
+              <tr><td>31 – 40</td><td>384 €</td></tr>
+              <tr><td>41 – 50</td><td>394 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="legal">
+        * Estimation hors options. Déplacements actuellement assurés autour de Lyon, Marseille, Montpellier, Nice (périmètre ~100 km). Au-delà,
+        des frais kilométriques s’ajoutent selon le calcul ci-dessus.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const modeTarif = document.getElementById('modeTarif');
+    const nbParticipants = document.getElementById('nbParticipants');
+    const distance = document.getElementById('distance');
+    const btnCalc = document.getElementById('btnCalc');
+    const btnReset = document.getElementById('btnReset');
+
+    const blocResult = document.getElementById('blocResult');
+    const baseEl = document.getElementById('base');
+    const deplEl = document.getElementById('depl');
+    const totalEl = document.getElementById('total');
+
+    // Barème "par personne" (nouveaux tarifs)
+    function ratePerPerson(n){
+      if(n>=10 && n<=15) return 37.90;
+      if(n>=16 && n<=20) return 35.60;
+      if(n>=21 && n<=25) return 33.90;
+      if(n>=26 && n<=30) return 32.60;
+      if(n>=31 && n<=35) return 31.60;
+      if(n>=36 && n<=40) return 30.80;
+      if(n>=41 && n<=45) return 30.10;
+      if(n>=46 && n<=50) return 29.50;
+      return null;
+    }
+
+    // Forfait animation 3h
+    function forfait(n){
+      if(n>=10 && n<=20) return 349;
+      if(n>=21 && n<=30) return 369;
+      if(n>=31 && n<=40) return 384;
+      if(n>=41 && n<=50) return 394;
+      return null;
+    }
+
+    function kmCost(oneWayKm){
+      // Aller-retour
+      let total = Number(oneWayKm) * 2;
+      // -200 km offerts au total (A/R)
+      total = Math.max(total - 200, 0);
+      // 0,50 € / km
+      return total * 0.5;
+    }
+
+    function euro(n){ return (Number(n).toFixed(2)+' €').replace('.', ','); }
+
+    btnCalc.addEventListener('click', (e)=>{
+      e.preventDefault();
+
+      const n = Number(nbParticipants.value);
+      const d = Number(distance.value);
+
+      if(!n || n<10 || n>50){
+        alert('Veuillez saisir un nombre de participants entre 10 et 50.');
+        return;
+      }
+      if(d<0 || Number.isNaN(d)){
+        alert('Veuillez saisir une distance aller simple (en km) valide.');
+        return;
+      }
+
+      let base = 0;
+      if(modeTarif.value === 'perso'){
+        const r = ratePerPerson(n);
+        if(r===null){ alert('Plage de participants non couverte.'); return; }
+        base = n * r;
+      }else{
+        const f = forfait(n);
+        if(f===null){ alert('Plage de participants non couverte.'); return; }
+        base = f;
+      }
+
+      const depl = kmCost(d);
+      const total = base + depl;
+
+      baseEl.textContent = euro(base);
+      deplEl.textContent = euro(depl);
+      totalEl.textContent = euro(total);
+      blocResult.style.display = 'block';
+    });
+
+    btnReset.addEventListener('click', ()=>{
+      nbParticipants.value = '';
+      distance.value = '';
+      blocResult.style.display = 'none';
+    });
+  </script>
 </body>
 </html>
+
